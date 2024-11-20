@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'development', // или 'production'
-  entry: './src/index.js', // Входной файл
+  entry: './src/index.js', // Путь к вашему исходному файлу
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -10,10 +10,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
+        test: /\.js$/, // Применяется ко всем .js файлам
+        exclude: /node_modules/, // Исключает папку node_modules
         use: {
-          loader: 'babel-loader', // Для трансформации JS
+          loader: 'babel-loader', // Использование babel-loader
+          options: {
+            presets: ['@babel/preset-env'], // Использование пресета для современных возможностей JS
+          },
         },
       },
     ],
