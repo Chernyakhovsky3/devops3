@@ -26,7 +26,7 @@ jobs:
 
       # 6. Секретный ключ представлен в явном виде
       - name: Deploy with secret
-        run: scp -r ./build user@production-server:/var/www/app
+        run: cp -r ./build user@production-server:/var/www/app
         env:
           PASSWORD: "myunsafetypassword"
 
