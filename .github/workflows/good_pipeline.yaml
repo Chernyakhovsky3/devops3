@@ -27,7 +27,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install deps
-        run: npm install && npm install --save-dev babel-loader @babel/core @babel/preset-env
+        run: npm install
 
       # 4. Линтер прерывает сборку при ошибках
       - name: Run linter
@@ -71,7 +71,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install deps
-        run: npm install && npm install --save-dev babel-loader @babel/core @babel/preset-env
+        run: npm install
 
       - name: Run integration tests
         run: npm run integration-tests
