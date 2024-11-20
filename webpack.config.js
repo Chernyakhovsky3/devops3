@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'development', // или 'production'
-  entry: 'src/index.js', // Входной файл
+  entry: './src/index.js', // Входной файл
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
