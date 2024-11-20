@@ -125,9 +125,8 @@ clear_btn = tk.Button(app, text = "Очистить форму", command=clear, 
 quit_btn = tk.Button(app, text = "Выйти", command=lambda: app.destroy()).grid(row=8, column=1, pady=7)
 
 
-
-# иконка
-#photo = tk.PhotoImage(file="path") 
+# иконка приложения
+#photo = tk.PhotoImage(file="path")
 #app.iconphoto(False, photo)
 
 
