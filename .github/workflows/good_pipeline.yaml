@@ -107,11 +107,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: frontend-build
+        continue-on-error: true
         # UPD: добавлена выгрузка артефактов из build_back
       - name: Download backend build artifact
         uses: actions/download-artifact@v3
         with:
           name: backend-build
+        continue-on-error: true
           
         # UPD: добавлено кэширование зависимостей в остальные jobs
       - name: Cache deps
