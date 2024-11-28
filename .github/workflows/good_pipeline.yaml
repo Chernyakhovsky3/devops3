@@ -9,7 +9,7 @@ on:
       - release
 
 jobs:
-  build:
+  lint_and_test:
     # 1. Используем конкретную версию Ubuntu для стабильности
     runs-on: ubuntu-20.04
 
@@ -43,24 +43,56 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+        # UPD: добавлено кэширование зависимостей в остальные jobs
+      - name: Cache deps
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install deps
         run: npm install && npm install --save-dev babel-loader @babel/core @babel/preset-env
 
       - name: Build front
         run: npm run build-frontend
+        
+        # UPD: добавлена загрузка артефактов из build_front
+      - name: Upload frontend build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-build
+          path: ./path/to/frontend/build
 
   build_back:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+        # UPD: добавлено кэширование зависимостей в остальные jobs
+      - name: Cache deps
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install deps
         run: npm install && npm install --save-dev babel-loader @babel/core @babel/preset-env
 
       - name: Build back
         run: npm run build-backend
+        
+        # UPD: добавлена загрузка артефактов из build_back
+      - name: Upload backend build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-build
+          path: ./path/to/backend/build
 
   integration_tests:
     runs-on: ubuntu-20.04
@@ -69,7 +101,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+        # UPD: добавлена выгрузка артефактов из build_front
+      - name: Download frontend build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-build
+        # UPD: добавлена выгрузка артефактов из build_back
+      - name: Download backend build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-build
+          
+        # UPD: добавлено кэширование зависимостей в остальные jobs
+      - name: Cache deps
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-  
+                
+      - name: Install deps
+        run: npm install
 
       - name: Run integration tests
         run: npm run integration-tests
+        
 
