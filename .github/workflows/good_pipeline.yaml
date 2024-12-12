@@ -45,11 +45,6 @@ jobs:
         run: |
           echo "Получение секретов..."
           
-          export DB_HOST=$(vault kv get -field=DB_HOST secret/app-config) || true 
-          export DB_USER=$(vault kv get -field=DB_USER secret/app-config) || true
-          export DB_PASSWORD=$(vault kv get -field=DB_PASSWORD secret/app-config) || true
-          export DB_NAME=$(vault kv get -field=DB_NAME secret/app-config) || true
-          
           if [[ ( -n "$DB_HOST" && -n "$DB_USER" && -n "$DB_PASSWORD" && -n "$DB_NAME" ) || true ]]; then
               echo "Все секреты успешно получены!"
               echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV 
@@ -61,6 +56,13 @@ jobs:
               exit 1
           fi
           continue-on-error: true
+          
+        #export DB_HOST=$(vault kv get -field=DB_HOST secret/app-config) || true
+        #export DB_USER=$(vault kv get -field=DB_USER secret/app-config) || true
+        #export DB_PASSWORD=$(vault kv get -field=DB_PASSWORD secret/app-config) || true
+        #export DB_NAME=$(vault kv get -field=DB_NAME secret/app-config) || true
+          
+          
           
           
 
