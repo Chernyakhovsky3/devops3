@@ -43,10 +43,10 @@ jobs:
           VAULT_TOKEN: ${{ env.VAULT_TOKEN }}
         run: |
           echo "Получение секрета"
-          export DB_HOST=$(vault kv get -field=host secret/app-config)
-          export DB_USER=$(vault kv get -field=user secret/app-config)
-          export DB_PASSWORD=$(vault kv get -field=password secret/app-config)
-          export DB_NAME=$(vault kv get -field=database secret/app-config)
+          export DB_HOST=$(vault kv get -field=DB_HOST secret/data/app-config)
+          export DB_USER=$(vault kv get -field=DB_USER secret/data/app-config)
+          export DB_PASSWORD=$(vault kv get -field=DB_PASSWORD secret/data/app-config)
+          export DB_NAME=$(vault kv get -field=DB_NAME secret/data/app-config)
           echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
           echo "DB_USER=$DB_USER" >> $GITHUB_ENV
           echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
