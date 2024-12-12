@@ -55,7 +55,7 @@ jobs:
               echo "Ошибка получения одного или нескольких секретов." >&2
               exit 1
           fi
-          continue-on-error: true
+        continue-on-error: true
           
         #export DB_HOST=$(vault kv get -field=DB_HOST secret/app-config) || true
         #export DB_USER=$(vault kv get -field=DB_USER secret/app-config) || true
