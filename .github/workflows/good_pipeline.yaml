@@ -45,17 +45,17 @@ jobs:
         run: |
           echo "Получение секретов..."
           
-          export DB_HOST=$(vault kv get -field=DB_HOST secret/app-config)
-          export DB_USER=$(vault kv get -field=DB_USER secret/app-config)
-          export DB_PASSWORD=$(vault kv get -field=DB_PASSWORD secret/app-config)
-          export DB_NAME=$(vault kv get -field=DB_NAME secret/app-config)
+          export DB_HOST=$(vault kv get -field=DB_HOST secret/app-config) || true 
+          export DB_USER=$(vault kv get -field=DB_USER secret/app-config) || true
+          export DB_PASSWORD=$(vault kv get -field=DB_PASSWORD secret/app-config) || true
+          export DB_NAME=$(vault kv get -field=DB_NAME secret/app-config) || true
           
           if [[ ( -n "$DB_HOST" && -n "$DB_USER" && -n "$DB_PASSWORD" && -n "$DB_NAME" ) || true ]]; then
               echo "Все секреты успешно получены!"
-              echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV || true
-              echo "DB_USER=$DB_USER" >> $GITHUB_ENV || true
-              echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV || true
-              echo "DB_NAME=$DB_NAME" >> $GITHUB_ENV || true
+              echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV 
+              echo "DB_USER=$DB_USER" >> $GITHUB_ENV
+              echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV 
+              echo "DB_NAME=$DB_NAME" >> $GITHUB_ENV
           else
               echo "Ошибка получения одного или нескольких секретов." >&2
               exit 1
