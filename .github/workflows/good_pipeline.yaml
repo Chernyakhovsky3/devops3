@@ -36,6 +36,7 @@ jobs:
             --header "Authorization: Bearer $ACTIONS_ID_TOKEN" \
             "${VAULT_ADDR}/v1/auth/oidc/login" | jq -r '.auth.client_token')
 
+
           echo "VAULT_TOKEN=${vault_token}" >> $GITHUB_ENV
           
       - name: Fetch secrets from Vault
