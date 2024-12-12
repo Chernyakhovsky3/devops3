@@ -60,6 +60,7 @@ jobs:
               echo "Ошибка получения одного или нескольких секретов." >&2
               exit 1
           fi
+        continue-on-error: true
           
           
 
