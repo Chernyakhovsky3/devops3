@@ -1,6 +1,5 @@
 name: Good CI/CD Pipeline
 
-# 2. Указаны ветки, для которых работает пайплайн
 on:
   push:
     branches:
@@ -10,9 +9,7 @@ on:
 
 jobs:
   lint_and_test:
-    # 1. Используем конкретную версию Ubuntu для стабильности
     runs-on: ubuntu-20.04
-    
     permissions:
       id-token: write
       contents: read
@@ -20,16 +17,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
+
       - name: Install Vault
         run: |
           curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo tee /etc/apt/trusted.gpg.d/hashicorp.asc
           sudo apt-add-repository "deb https://apt.releases.hashicorp.com $(lsb_release -cs) main"
           sudo apt update
-          sudo apt install vault
+          sudo apt install -y vault
         
-        # подключаемся к OIDC
-      - name: Configure OIDC
+      - name: Configure OIDC and fetch secrets
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
         run: |
@@ -41,7 +37,6 @@ jobs:
 
           echo "VAULT_TOKEN=${vault_token}" >> $GITHUB_ENV
 
-        # получаем секреты и сохраняем их в переменные окружения
       - name: Fetch secrets from Vault
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
@@ -57,13 +52,12 @@ jobs:
           echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
           echo "DB_NAME=$DB_NAME" >> $GITHUB_ENV
 
-        # используем секреты для подключения и к базе данных и делаем тестовый запрос
       - name: Connect to the database
         run: |
           echo "Подключение к базе данных..."
-          export DATABASE_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME" || true
+          export DATABASE_URL="postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME"
           echo "Подключаемся к базе данных с URL: $DATABASE_URL"
-          psql $DATABASE_URL -c "SELECT 1"  # Выполнение простого запроса, чтобы проверить подключение || true
+          psql $DATABASE_URL -c "SELECT 1" || true
         continue-on-error: true
         
       # 3. Кеширование зависимостей для ускорения сборки
