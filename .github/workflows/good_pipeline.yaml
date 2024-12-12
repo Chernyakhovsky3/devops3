@@ -21,6 +21,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         
+      - name: Install Vault
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo tee /etc/apt/trusted.gpg.d/hashicorp.asc
+          sudo apt update
+          sudo apt install vault
+        
         # подключаемся к OIDC
       - name: Configure OIDC
         env:
