@@ -28,6 +28,7 @@ jobs:
         id: vault-login
         continue-on-error: true
           
+          
       - name: Fetch secrets from Vault
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
