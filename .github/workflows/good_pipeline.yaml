@@ -26,6 +26,7 @@ jobs:
           method: oidc
           role: github
         id: vault-login
+        continue-on-error: true
           
       - name: Fetch secrets from Vault
         env:
