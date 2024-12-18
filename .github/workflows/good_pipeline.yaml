@@ -18,15 +18,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Используем HashiCorp Vault Action для аутентификации и получения секретов
-      - name: Login to Vault and fetch secrets
+      - name: Login to Vault
         uses: hashicorp/vault-action@v2
         with:
           url: ${{ secrets.VAULT_ADDR }}
-          method: oidc
-          role: github
+          customAuthPayload: |
+            {
+              "role": "github",
+              "jwt": "${{ steps.get_oidc_token.outputs.token }}"
+            }
         id: vault-login
-        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get OIDC Token
+        id: get_oidc_token
+        run: |
+          echo "Fetching OIDC token..."
+          oidc_token=$(curl -H "Authorization: Bearer $ACTIONS_ID_TOKEN" \
+            https://token.actions.githubusercontent.com)
+          echo "::set-output name=token::$oidc_token"
           
           
       - name: Fetch secrets from Vault
